@@ -36,6 +36,14 @@ export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
         })
       })
     });
-    
+
+    // Define fargate service
+    const fargateService =new ecs.FargateService(this, 'MyFargateService', {
+      cluster: cluster,
+      taskDefinition: taskDefinition,
+      desiredCount: 1,
+      assignPublicIp: true
+    });
+
   }
 }
