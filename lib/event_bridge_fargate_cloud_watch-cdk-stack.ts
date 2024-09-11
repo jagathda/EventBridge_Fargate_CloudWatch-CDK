@@ -4,6 +4,7 @@ import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as logs from 'aws-cdk-lib/aws-logs';
+import * as events from 'aws-cdk-lib/aws-events';
 
 export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -43,6 +44,13 @@ export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
       taskDefinition: taskDefinition,
       desiredCount: 1,
       assignPublicIp: true
+    });
+
+    // Define eventbridge rule
+    const rule = new events.Rule(this, 'MyEventRule', {
+      eventPattern: {
+        source: ['custom.my-application']
+      }
     });
 
   }
