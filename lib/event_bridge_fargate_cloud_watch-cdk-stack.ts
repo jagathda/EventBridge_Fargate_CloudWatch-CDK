@@ -3,6 +3,7 @@ import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
+import * as logs from 'aws-cdk-lib/aws-logs';
 
 export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -23,5 +24,18 @@ export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
 
     // ECS task definition
     const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDef');
+
+    // Define container in task definition
+    const container = taskDefinition.addContainer('MyContainer', {
+      image: ecs.ContainerImage.fromEcrRepository(repository),
+      logging: new ecs.AwsLogDriver({
+        streamPrefix: 'MyAppLogs',
+        logGroup: new logs.LogGroup(this, 'LogGroup', {
+          logGroupName: '/ecs/MyApp',
+          removalPolicy: cdk.RemovalPolicy.DESTROY
+        })
+      })
+    });
+    
   }
 }
