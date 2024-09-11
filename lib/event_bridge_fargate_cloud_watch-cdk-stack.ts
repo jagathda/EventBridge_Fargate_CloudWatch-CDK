@@ -21,5 +21,7 @@ export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
     // Define ECR repository
     const repository = ecr.Repository.fromRepositoryName(this, 'MyRepo', 'my-docker-repo');
 
+    // ECS task definition
+    const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDef');
   }
 }
