@@ -6,6 +6,7 @@ import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as events from 'aws-cdk-lib/aws-events';
 import * as eventstargets from 'aws-cdk-lib/aws-events-targets';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -22,7 +23,7 @@ export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
     });
 
     // Define ECR repository
-    const repository = ecr.Repository.fromRepositoryName(this, 'MyRepo', 'my-docker-repo');
+    const repository = ecr.Repository.fromRepositoryName(this, 'MyRepo', 'message-logger-cdk');
 
     // ECS task definition
     const taskDefinition = new ecs.FargateTaskDefinition(this, 'TaskDef');
