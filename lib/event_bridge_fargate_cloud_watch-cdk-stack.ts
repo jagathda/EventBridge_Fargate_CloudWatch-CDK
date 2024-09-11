@@ -5,6 +5,7 @@ import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ecr from 'aws-cdk-lib/aws-ecr';
 import * as logs from 'aws-cdk-lib/aws-logs';
 import * as events from 'aws-cdk-lib/aws-events';
+import * as eventstargets from 'aws-cdk-lib/aws-events-targets';
 
 export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
@@ -52,6 +53,14 @@ export class EventBridgeFargateCloudWatchCdkStack extends cdk.Stack {
         source: ['custom.my-application']
       }
     });
+
+    // Add target to eventbridge rule (ecs task)
+    rule.addTarget(new eventstargets.EcsTask({
+      cluster: cluster,
+      taskDefinition: taskDefinition,
+      subnetSelection: { subnetType: ec2.SubnetType.PUBLIC},
+      assignPublicIp: true
+    }));
 
   }
 }
